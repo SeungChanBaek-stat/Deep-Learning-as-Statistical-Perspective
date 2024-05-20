@@ -1,4 +1,6 @@
+import random
 import numpy as np
+import torch
 
 
 
@@ -9,6 +11,23 @@ def class_idx_to_name():
  
     X_idx_to_name = {int(k): v[1] for k, v in class_idx_to_name_dict.items()}
     return X_idx_to_name
+
+
+
+def torch_fix_seed(seed=42):
+    # Python random
+    random.seed(seed)
+    # Numpy
+    np.random.seed(seed)
+    # Pytorch
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    # torch.backends.cudnn.deterministic = True
+    # torch.use_deterministic_algorithms = True
+    # torch.backends.cudnn.benchmark = True
+# SEED = 77
+# torch_fix_seed(SEED)
+
 
 # # 예시: 인덱스 0에 해당하는 클래스 이름을 출력합니다.
 # print(class_idx_to_name()[0])  # 출력: 'tench'
