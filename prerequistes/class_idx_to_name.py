@@ -10,5 +10,5 @@ def class_idx_to_name():
     X_idx_to_name = {int(k): v[1] for k, v in class_idx_to_name_dict.items()}
     return X_idx_to_name
 
-# 예시: 인덱스 0에 해당하는 클래스 이름을 출력합니다.
-print(class_idx_to_name()[0])  # 출력: 'tench'
+# # 예시: 인덱스 0에 해당하는 클래스 이름을 출력합니다.
+# print(class_idx_to_name()[0])  # 출력: 'tench'

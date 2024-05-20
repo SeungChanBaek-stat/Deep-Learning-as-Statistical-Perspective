@@ -15,7 +15,7 @@ from class_idx_to_name import class_idx_to_name
 # VGG-16 사용을 위한 클래스 지정 (1000개)
 idx_dict = class_idx_to_name()
 
-print(idx_dict()[0]) # tench가 출력되어야 함
+print(idx_dict[0]) # tench가 출력되어야 함
 
 weights = models.VGG16_Weights.IMAGENET1K_V1 # 이 코드에 사용하려는 모델 가중치 불러오기
 model = models.vgg16(weights=weights) # 불러온 가중치 모델에 장착
