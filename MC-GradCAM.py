@@ -43,6 +43,16 @@ gradcam = GradCAM(model=model, device=device, dtype=dtype)
 gradcam_test_instance = GradCAM_TEST(gradcam=gradcam, idx_dict=idx_dict)
 result_list = gradcam_test_instance.gradcam_test()
 
+
+import os
+
+# 결과를 저장할 디렉토리 경로 설정
+results_dir = "/content/drive/MyDrive/Deep-Learning-as-Statistical-Perspective/gradcam_original_test"
+
+# 디렉토리가 존재하지 않으면 생성
+if not os.path.exists(results_dir):
+    os.makedirs(results_dir)
+
 for idx in range(len(result_list)):
     img_path = result_list[idx]["img_path"]
     out_class = result_list[idx]["out_class"]
@@ -64,10 +74,8 @@ for idx in range(len(result_list)):
     for i in range(2):
         axes[i].axis("off")
     fig.tight_layout()
-    plt.show()
 
-    # 플롯을 파일로 저장
-    output_path = os.path.join("/content/drive/MyDrive/Deep-Learning-as-Statistical-Perspective/gradcam_original_test", f"result_{idx}.png")
+    output_path = os.path.join(results_dir, f"result_{idx}.png")
     plt.savefig(output_path)
     plt.close(fig)
     print(f"Saved {output_path}")
