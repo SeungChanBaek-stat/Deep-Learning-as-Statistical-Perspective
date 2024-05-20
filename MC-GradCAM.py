@@ -13,7 +13,8 @@ import cv2
 import matplotlib.pyplot as plt
 from prerequisites import class_idx_to_name
 from prerequisites import torch_fix_seed
-from GradCAM_original import GradCAM
+from GradCAM_original import GradCAM, GradCAM_TEST
+import pandas as pd
 
 # VGG-16 사용을 위한 클래스 지정 (1000개)
 idx_dict = class_idx_to_name()
@@ -36,23 +37,34 @@ import os
 
 device = torch.device("cuda")
 dtype = torch.float32
-gradcam = GradCAM(model, device=device, dtype=dtype)
+gradcam = GradCAM(model=model, device=device, dtype=dtype)
 
-# 이미지 경로 설정
-img_path1='/content/drive/MyDrive/DLSP_Uncertainty_Quantification/ImageNet_val_image/kaggle/input/imagenet-object-localization-challenge/ILSVRC/Data/CLS-LOC/val/ILSVRC2012_val_00000027.JPEG' # 하얀 늑대 사진
-img_path2='/content/drive/MyDrive/DLSP_Uncertainty_Quantification/ImageNet_val_image/kaggle/input/imagenet-object-localization-challenge/ILSVRC/Data/CLS-LOC/val/ILSVRC2012_val_00001624.JPEG' # 개 사진
-img_path3='/content/drive/MyDrive/DLSP_Uncertainty_Quantification/ImageNet_val_image/kaggle/input/imagenet-object-localization-challenge/ILSVRC/Data/CLS-LOC/val/ILSVRC2012_val_00000228.JPEG' # 개 2마리 사진
-img_path4='/content/drive/MyDrive/DLSP_Uncertainty_Quantification/Final/20231227/pytorch-grad-cam-test/both.png'
+# 이미지 4장에 대해서 GradCAM 테스트
+gradcam_test_instance = GradCAM_TEST(gradcam=gradcam, idx_dict=idx_dict)
+result_list = gradcam_test_instance.gradcam_test()
 
+for idx in range(len(result_list)):
+    img_path = result_list[idx]["img_path"]
+    out_class = result_list[idx]["out_class"]
+    grad_cam_arr = result_list[idx]["grad_cam_arr"]
 
-imgtest1 = Image.open(img_path1)
-imgtest1_np = np.array(imgtest1)
-print(np.shape(imgtest1_np))
+    img_original = Image.open(img_path).convert('RGB')
+    out_series = pd.Series(out_class).value_counts()
+    out_df = pd.DataFrame(out_series, columns=["count"], index=out_series.index).reset_index()
+    predicted_label = pd.Series(out_class).value_counts().index[0]
 
-
-# # 이미지 크기 확인
-# #width, height = imgtest1.size
-# #print("Width:", width, "Height:", height)
+    grad_cam_heatmap = np.squeeze(grad_cam_arr, axis=0)
+    fig, axes = plt.subplots(1, 2, figsize = (8, 8))
+    axes = axes.flatten()
+    axes[0].imshow(img_original)
+    axes[0].set_title(f"Predicted as {predicted_label}")
+    #axes[1].imshow(np.linalg.norm(grad_cam_heatmap, axis=-1, ord=2))
+    axes[1].imshow(grad_cam_heatmap)
+    axes[1].set_title(f"GradCAM")
+    for i in range(2):
+        axes[i].axis("off")
+    fig.tight_layout()
+    plt.show()
 
 # # 저장 경로 설정
 # path_to_save_grad = '/content/drive/MyDrive/DLSP_Uncertainty_Quantification/MC gradcam/20231205 v3/gradcamvalue'
