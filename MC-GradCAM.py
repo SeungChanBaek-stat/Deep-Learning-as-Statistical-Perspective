@@ -1,6 +1,7 @@
 import sys, os
-sys.path.append('/content/drive/MyDrive/Deep-Learning-as-Statistical-Perspective')
-sys.path.append(os.pardir)
+# sys.path.append('/content/drive/MyDrive/Deep-Learning-as-Statistical-Perspective')
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'prerequistes')))
+# sys.path.append(os.pardir)
 import torch
 import torch.nn.functional as F
 import torchvision.models as models
