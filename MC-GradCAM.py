@@ -47,7 +47,7 @@ result_list = gradcam_test_instance.gradcam_test()
 import os
 
 # 결과를 저장할 디렉토리 경로 설정
-results_dir = "/content/drive/MyDrive/Deep-Learning-as-Statistical-Perspective/gradcam_original_test"
+results_dir = "/content/drive/MyDrive/Deep-Learning-as-Statistical-Perspective/Images/gradcam_original_test"
 
 # 디렉토리가 존재하지 않으면 생성
 if not os.path.exists(results_dir):
@@ -75,7 +75,7 @@ for idx in range(len(result_list)):
         axes[i].axis("off")
     fig.tight_layout()
 
-    output_path = os.path.join(results_dir, f"result_{idx}.png")
+    output_path = os.path.join(results_dir, f"result_{idx + 1}.png")
     plt.savefig(output_path)
     plt.close(fig)
     print(f"Saved {output_path}")
