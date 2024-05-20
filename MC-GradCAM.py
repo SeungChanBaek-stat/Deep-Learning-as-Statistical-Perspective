@@ -66,6 +66,12 @@ for idx in range(len(result_list)):
     fig.tight_layout()
     plt.show()
 
+    # 플롯을 파일로 저장
+    output_path = os.path.join("/content/drive/MyDrive/Deep-Learning-as-Statistical-Perspective/gradcam_original_test", f"result_{idx}.png")
+    plt.savefig(output_path)
+    plt.close(fig)
+    print(f"Saved {output_path}")
+
 # # 저장 경로 설정
 # path_to_save_grad = '/content/drive/MyDrive/DLSP_Uncertainty_Quantification/MC gradcam/20231205 v3/gradcamvalue'
 # path_to_save_heatmap = '/content/drive/MyDrive/DLSP_Uncertainty_Quantification/MC gradcam/20231205 v3/heatmap'
