@@ -239,45 +239,5 @@ class GradCAM:
         return np.uint8(255 * cam)
     
     
-
-class GradCAM_TEST:
-    def __init__(self, gradcam, idx_dict):
-        self.gradcam = gradcam
-        self.idx_dict = idx_dict
-        self.result_list = []
-        self.img_path1 = '/content/drive/MyDrive/Deep-Learning-as-Statistical-Perspective/Images/test/img_1.JPEG' # 하얀 늑대 사진
-        self.img_path2 = '/content/drive/MyDrive/Deep-Learning-as-Statistical-Perspective/Images/test/img_2.JPEG' # 개 사진
-        self.img_path3 = '/content/drive/MyDrive/Deep-Learning-as-Statistical-Perspective/Images/test/img_3.JPEG' # 개 2마리 사진
-        self.img_path4 = '/content/drive/MyDrive/Deep-Learning-as-Statistical-Perspective/Images/test/img_4.png'
-        self.bs = 1
-        self.num_bs = 1
-        
-    def gradcam_test(self):
-        img_list = [self.img_path1, self.img_path2, self.img_path3, self.img_path4]
-        result_list = self.result_list
-        for img_path_ in img_list:
-            result_dict = {}
-            img_tensor = self.gradcam.load_img(img_path=img_path_)
-            if img_tensor.dtype != self.gradcam.dtype:
-                img_tensor = img_tensor.to(self.gradcam.dtype)
-            result_dict["img_path"] = img_path_
-            result_dict["grad_cam_heatmap"] = []
-            result_dict["out_class"] = []
-            for batch_idx in range(self.num_bs):
-                img_tensors = torch.cat([img_tensor for _ in range(self.bs)])
-                #heatmap, predicted_class, img_np = self.model.run_grad_cam(img_tensor=img_tensors)
-                heatmap, predicted_class, img_np = self.gradcam.run_grad_cam(img_path=img_path_, img_class=99)
-                print("predicted_class : ", predicted_class)
-                out_class = [self.idx_dict[pred_cls.item()] for pred_cls in predicted_class]
-                print("out_class : ", out_class)
-                grad_cam_heatmap = self.gradcam.show_cam_on_image(img=img_np, mask=heatmap, use_rgb=True, colormap=cv2.COLORMAP_JET, image_weight=0.5)
-                result_dict["grad_cam_heatmap"].append(grad_cam_heatmap)
-                result_dict["out_class"] += out_class
-            result_dict["grad_cam_arr"] = np.stack(result_dict["grad_cam_heatmap"])
-            result_list.append(result_dict)
-            
-        return result_list
-    
-    
     
 
