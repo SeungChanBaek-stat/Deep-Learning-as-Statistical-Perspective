@@ -11,13 +11,16 @@ from PIL import Image
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
-from prerequisites import class_idx_to_name
+from prerequisites import ClassIdxToName
 from prerequisites import torch_fix_seed
 from GradCAM_original import GradCAM, GradCAM_TEST
 import pandas as pd
 
 # VGG-16 사용을 위한 클래스 지정 (1000개)
-idx_dict = class_idx_to_name()
+idx_dict = ClassIdxToName()
+search_results = idx_dict.search_word("fish")
+print(search_results)
+
 
 print(idx_dict[0]) # tench가 출력되어야 함
 
