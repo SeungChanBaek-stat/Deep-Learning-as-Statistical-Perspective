@@ -1,5 +1,5 @@
 import sys, os
-sys.path.append('/content/drive/MyDrive')
+sys.path.append('/content/drive/MyDrive/Deep-Learning-as-Statistical-Perspective')
 sys.path.append(os.pardir)
 import torch
 import torch.nn.functional as F
