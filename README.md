@@ -14,6 +14,7 @@ GradCAM_FCDrop_ModifiedGradCAM_v6 는 Segmentation style GradCAM의 주목영역
 
 ## 프로젝트 구조
 
+```
 Deep-Learning-as-Statistical-Perspective
 
 |-- GradCAM_FCDrop_ModifiedGradCAM_v6.ipynb
@@ -44,7 +45,8 @@ Deep-Learning-as-Statistical-Perspective
 |   `-- GradCAM_original_test.py
 |-- prerequisites
 |   `-- prerequisites.py
-|-- requirements.txt
+`-- requirements.txt
+```
 <!-- `-- \261\327\267\241\265\345\304\267\300\307 \272\322\310\256\275\307\274\272 \303\370\301\244.pdf -->
 
 
