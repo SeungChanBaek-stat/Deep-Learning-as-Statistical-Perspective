@@ -13,6 +13,16 @@ from typing import List, Dict
 import math
 
 class GradCAM:
+    """GradCAM을 사용하여 모델의 주목 영역을 시각화하는 클래스.
+
+    Attributes:
+        model: CNN기반 모형.
+        dtype: 데이터 타입 (기본값: torch.float32).
+        device: 연산에 사용될 장치 (기본값: CPU).        
+        feature_maps: 모델의 활성화 맵.
+        feature_extractor: 모델의 마지막 합성곱층의 활성화맵 추출 부분.
+        classifier: 모델의 분류 부분.
+    """
     def __init__(self, model, dtype=torch.float32, device=torch.device("cpu")):
         self.feature_maps = None
         self.dtype = dtype
@@ -35,6 +45,20 @@ class GradCAM:
         self.classifier = self.classifier.to(device, dtype=dtype)
 
 
+    def load_img(self, img_path):
+        # 이미지 전처리 및 requires_grad 설정
+        img = Image.open(img_path).convert('RGB')
+        preprocess = transforms.Compose([
+            transforms.Resize((224, 224)),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        ])
+        img_preprocessed = preprocess(img).to(self.dtype)  # 여기에 .to(self.dtype) 추가
+        img_preprocessed = img_preprocessed.unsqueeze(0).to(self.device, self.dtype)  # 이미지를 모델의 데이터 타입과 디바이스로 이동
+        img_preprocessed.requires_grad_(True)
+        return img_preprocessed
+
+
     # 클래스 스코어 추출 함수
     def get_class_score(self, img_tensor):
 
@@ -53,6 +77,9 @@ class GradCAM:
           score_out = score.sum()
           score_out.backward()
           grad_Ak = Ak.grad
+        
+        #테스트용
+        print(predicted_class, type(predicted_class))
 
         return predicted_class, score, Ak, grad_Ak, out
 
@@ -102,6 +129,7 @@ class GradCAM:
 
     # Grad-CAM 계산기
     def calculate_grad_cam(self, Ak, gradients, target_size):
+
         # 그라디언트의 글로벌 평균 계산 (by channel)
         alpha_c_k = torch.mean(gradients, dim=[2, 3])
 
@@ -133,18 +161,7 @@ class GradCAM:
         #return heatmap.cpu().detach().numpy().astype(np.float32)
         return heatmap
 
-    def load_img(self, img_path):
-        # 이미지 전처리 및 requires_grad 설정
-        img = Image.open(img_path).convert('RGB')
-        preprocess = transforms.Compose([
-            transforms.Resize((224, 224)),
-            transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-        ])
-        img_preprocessed = preprocess(img).to(self.dtype)  # 여기에 .to(self.dtype) 추가
-        img_preprocessed = img_preprocessed.unsqueeze(0).to(self.device, self.dtype)  # 이미지를 모델의 데이터 타입과 디바이스로 이동
-        img_preprocessed.requires_grad_(True)
-        return img_preprocessed
+
 
 
     def run_grad_cam(self, img_path=None, img_tensor=None, img_class=None, ranking=None):

@@ -31,15 +31,7 @@ Deep-Learning-as-Statistical-Perspective
 |   |   `-- test_tf_results
 |   `-- gradcam_original_test_small
 |       |-- results
-|       |   |-- result_1.png
-|       |   |-- result_2.png
-|       |   |-- result_3.png
-|       |   `-- result_4.png
 |       `-- test
-|           |-- img_1.JPEG
-|           |-- img_2.JPEG
-|           |-- img_3.JPEG
-|           `-- img_4.png
 |-- gradcam
 |   |-- GradCAM_original.py
 |   `-- GradCAM_original_test.py
@@ -55,6 +47,8 @@ Deep-Learning-as-Statistical-Perspective
 
 - **data/gradcam_original_test_small**: 이미지 데이터 4장의 파일이 저장되는 디렉토리입니다.
 - **data/gradcam_original_test_large**: ILSVRC 2012 이미지넷 데이터 202장의 파일이 저장되는 디렉토리입니다.
+- **gradcam/GradCAM_original.py**: GradCAM 함수가 구현되어 있는 코드입니다.
+- **gradcam/GradCAM_original_test.py**: GradCAM 함수를 통해 히트맵을 생성하는 코드입니다.
 - **prerequisites**: VGG-16의 클래스 인덱스 지정 및 시드 고정하는 함수가 들어있는 디렉토리입니다.
 - **GradCAM_FCDrop_OriginalGradCAM_v3.ipynb**: 기존 GradCAM을 이용한 불확실성 측정 주피터 노트북입니다.
 - **GradCAM_FCDrop_ModifiedGradCAM_v6.ipynb**: Segmentation 스타일 GradCAM을 이용한 불확실성 측정 주피터 노트북입니다.
