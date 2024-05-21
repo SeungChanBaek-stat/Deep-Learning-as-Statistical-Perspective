@@ -15,21 +15,37 @@ GradCAM_FCDrop_ModifiedGradCAM_v6 는 Segmentation style GradCAM의 주목영역
 ## 프로젝트 구조
 
 Deep-Learning-as-Statistical-Perspective
+
 ├── data
+
 │ ├── gradcam_original_test_small # 이미지 데이터 4장의 파일이 저장되는 디렉토리
+
 │ │ ├── test
+
 │ │ └── results
+
 │ └── gradcam_original_test_large # 이미지 데이터 202장의 파일이 저장되는 디렉토리
+
 │ ├── test_or # 원본 이미지
+
 │ ├── test_or_results
+
 │ ├── test_tf # 노이즈 이미지
+
 │ └── test_tf_results
+
 ├── prerequisites
+
 │ └── prerequisites.py # 클래스 인덱스 지정 및 시드 고정하는 코드
+
 ├── GradCAM_FCDrop_OriginalGradCAM_v3.ipynb # 기존 GradCAM을 이용한 불확실성 측정 주피터 노트북
+
 ├── GradCAM_FCDrop_ModifiedGradCAM_v6.ipynb # Segmentation 스타일 GradCAM을 이용한 불확실성 측정 주피터 노트북
+
 ├── GradCAM_test.py # 기존 GradCAM 불확실성 측정 코드
+
 ├── requirements.txt # 프로젝트 의존성 목록
+
 └── README.md # 프로젝트 개요 및 설명 파일
 
 
