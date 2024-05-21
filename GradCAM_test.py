@@ -1,7 +1,7 @@
 import sys, os
 # sys.path.append('/content/drive/MyDrive/Deep-Learning-as-Statistical-Perspective')
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'prerequisites')))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'GradCAM')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'gradcam')))
 # sys.path.append(os.pardir)
 import torch
 import torch.nn.functional as F
