@@ -75,6 +75,9 @@ class GradCAMVisualize:
                 out_class_top_3 = result_list[idx]["out_class_top-3"]
                 grad_cam_arr_top_3 = result_list[idx]["grad_cam_arr"]
 
+                filename_with_ext = os.path.basename(img_path)
+                filename, _ = os.path.splitext(filename_with_ext)
+
                 img_original = Image.open(img_path).convert('RGB')
                 out_series_top_3 = pd.Series(out_class_top_3).value_counts()
                 out_df = pd.DataFrame(out_series_top_3, columns=["count"], index=out_series_top_3.index).reset_index()
@@ -95,16 +98,18 @@ class GradCAMVisualize:
                     for i in range(2):
                         axes[i].axis("off")
                     fig.tight_layout()
-                    plt.show()
-                    # save_filename = os.path.join(save_plot_dir, f"hyena_{idx}.png")
-                    # plt.savefig(save_filename, bbox_inches='tight')
-                    # plt.close(fig)
+                    save_filename = os.path.join(save_plot_dir, f"{predicted_label}_{filename}.png")
+                    plt.savefig(save_filename, bbox_inches='tight')
+                    plt.close(fig)
 
         else:
             for idx in range(len(result_list)):
                 img_path = result_list[idx]["img_path"]
                 out_class = result_list[idx]["out_class"]
                 grad_cam_arr = result_list[idx]["grad_cam_arr"]
+
+                filename_with_ext = os.path.basename(img_path)
+                filename, _ = os.path.splitext(filename_with_ext)
 
                 img_original = Image.open(img_path).convert('RGB')
                 out_series = pd.Series(out_class).value_counts()
@@ -122,7 +127,6 @@ class GradCAMVisualize:
                 for i in range(2):
                     axes[i].axis("off")
                 fig.tight_layout()
-                plt.show()
-                # save_filename = os.path.join(save_plot_dir, f"hyena_{idx}.png")
-                # plt.savefig(save_filename, bbox_inches='tight')
-                # plt.close(fig)
+                save_filename = os.path.join(save_plot_dir, f"{predicted_label}_{filename}.png")
+                plt.savefig(save_filename, bbox_inches='tight')
+                plt.close(fig)

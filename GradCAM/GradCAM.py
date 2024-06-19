@@ -20,13 +20,11 @@ class GradCAM:
         model: CNN기반 모형.
         dtype: 데이터 타입 (기본값: torch.float32).
         device: 연산에 사용될 장치 (기본값: CPU).
-        feature_maps: 모델의 활성화 맵.
         feature_extractor: 모델의 마지막 합성곱층의 활성화맵 추출 부분.
         classifier: 모델의 분류 부분.
         mode: "default" - 클래스를 정하고 gradcam 계산, "top-3" - 모델이 예측한 top3순위에 해당하는 gradcam 계산
     """
     def __init__(self, model, dtype=torch.float32, device=torch.device("cpu"), mode="default"):
-        self.feature_maps = None
         self.dtype = dtype
         self.device = device
         self.mode = mode
@@ -112,37 +110,22 @@ class GradCAM:
 
 
     def get_class_score_default(self, img_tensor, img_class):
-        self.feature_extractor.zero_grad()
-        self.classifier.zero_grad()
+        with torch.cuda.amp.autocast():   
+            self.feature_extractor.zero_grad()
+            self.classifier.zero_grad()
 
-        # 이미지 전처리 및 requires_grad 설정
-        img_tensor.requires_grad_(True)
-        with torch.no_grad():
-            Ak = self.feature_extractor(img_tensor)
+            # 이미지 전처리 및 requires_grad 설정
+            img_tensor.requires_grad_(True)
+            with torch.no_grad():
+                Ak = self.feature_extractor(img_tensor)
 
-        Ak.requires_grad_(True)
-
-        # 일시적으로 첫 번째 ReLU를 inplace=False로 변경
-        if isinstance(self.classifier[0], nn.ReLU) and self.classifier[0].inplace:
-            self.classifier[0].inplace = False
-
-        try:
-            with torch.cuda.amp.autocast():
-                out = self.classifier(Ak)
-                print(f"out shape after classifier: {out.shape}")
-        except Exception as e:
-            print(f"Error during classifier forward pass: {e}")
-            return None
-        finally:
-            # 원래 상태로 복구
-            if isinstance(self.classifier[0], nn.ReLU):
-                self.classifier[0].inplace = True
-
-        predicted_class = img_class
-        score = out[:, predicted_class]
-        score_out = score.sum()
-        score_out.backward()
-        grad_Ak = Ak.grad
+            Ak.requires_grad_(True)
+            out = self.classifier(Ak)
+            predicted_class = img_class
+            score = out[:, predicted_class]
+            score_out = score.sum()
+            score_out.backward()
+            grad_Ak = Ak.grad
 
         return predicted_class, score, Ak, grad_Ak, out
 
